@@ -6,32 +6,20 @@ function App() {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/resume")
+        fetch("https://resume-chatbot-backend-production.up.railway.app/resume")
             .then(response => response.json())
             .then(data => setResume(data))
             .catch(error => console.error("Error fetching resume:", error));
     }, []);
-
+    
     const sendMessage = async () => {
-        if (!input.trim()) return;
-        const userMessage = { text: input, sender: "user" };
-        setMessages([...messages, userMessage]);
-
-        try {
-            const response = await fetch("http://127.0.0.1:8000/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: input }),
-            });
-
-            const data = await response.json();
-            setMessages([...messages, userMessage, { text: data.response, sender: "bot" }]);
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
-
-        setInput("");
+        const response = await fetch("https://resume-chatbot-backend-production.up.railway.app/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: input }),
+        });
     };
+    
 
     return (
         <div style={{ padding: "20px", fontFamily: "Arial" }}>
